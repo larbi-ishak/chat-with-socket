@@ -1,0 +1,37 @@
+import React, { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+
+const MyComponent = () => {
+  const [socket, setSocket] = useState(null);
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    if (!connected) {
+      const newSocket = io.connect("http://localhost:3000");
+      setSocket(newSocket);
+      setConnected(true);
+    }
+    
+    // Clean up the socket connection when the component unmounts
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
+  }, [connected]);
+
+  const joinRoom = () => {
+    if (socket && username !== "" && room !== "") {
+      socket.emit("join_room", room);
+      setShowChat(true);
+    }
+  };
+
+  // Rest of your component code
+
+  return (
+    // JSX for your component
+  );
+};
+
+export default MyComponent;
